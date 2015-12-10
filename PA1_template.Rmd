@@ -1,7 +1,7 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
 ---
-Author: Peter Müller
+Author: Peter Müller, `r Sys.Date()`
 
 ## Overview
 
@@ -18,16 +18,32 @@ activity$date <- as.Date(activity$date, "%Y-%m-%d")
 
 ### What is mean total number of steps taken per day?
 
-# total number of steps for each day
 ```{r}
+# total number of steps for each day
 dailySteps <- aggregate(steps ~ date, data = activity, FUN=sum, na.rm = TRUE)
 # draw histogramm
-hist(dailySteps$steps, main = "daily steps", xlab = "total steps / day", col = "green")
+hist(dailySteps$steps, breaks=20, main = "daily steps", xlab = "total steps / day", col = "green")
 ```
 
-The mean is `r format(mean(dailySteps$steps), scientific = FALSE)` and median is `r format(median(dailySteps$steps))`.
+The mean is **`r format(mean(dailySteps$steps), scientific = FALSE)`** and median is **`r format(median(dailySteps$steps))`**.
 
 ### What is the average daily activity pattern?
+
+```{r}
+# calculate average of each 5 minute interval
+dailyPattern = aggregate(steps ~ interval, data = activity, FUN=mean, na.rm = TRUE)
+# plot the time series
+plot(dailyPattern$interval, 
+     dailyPattern$steps, 
+     type="l", 
+     col="green", 
+     lwd = 3,
+     xlab="5-minute interval", 
+     ylab="average number of steps", 
+     main="Time series plot of the average daily activity pattern")
+```
+
+5-minute interval containing the maximum steps: **`r subset(dailyPattern, steps==max(dailyPattern$steps))$interval`** (`r round(max(dailyPattern$steps), digits=0)` steps)
 
 ### Imputing missing values
 

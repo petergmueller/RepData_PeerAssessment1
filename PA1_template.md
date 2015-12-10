@@ -1,7 +1,7 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
 ---
-Author: Peter Müller
+Author: Peter Müller, 2015-12-10
 
 ## Overview
 
@@ -19,19 +19,38 @@ activity$date <- as.Date(activity$date, "%Y-%m-%d")
 
 ### What is mean total number of steps taken per day?
 
-# total number of steps for each day
 
 ```r
+# total number of steps for each day
 dailySteps <- aggregate(steps ~ date, data = activity, FUN=sum, na.rm = TRUE)
 # draw histogramm
-hist(dailySteps$steps, main = "daily steps", xlab = "total steps / day", col = "green")
+hist(dailySteps$steps, breaks=20, main = "daily steps", xlab = "total steps / day", col = "green")
 ```
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
-The mean is 10766.19 and median is 10765.
+The mean is **10766.19** and median is **10765**.
 
 ### What is the average daily activity pattern?
+
+
+```r
+# calculate average of each 5 minute interval
+dailyPattern = aggregate(steps ~ interval, data = activity, FUN=mean, na.rm = TRUE)
+# plot the time series
+plot(dailyPattern$interval, 
+     dailyPattern$steps, 
+     type="l", 
+     col="green", 
+     lwd = 3,
+     xlab="5-minute interval", 
+     ylab="average number of steps", 
+     main="Time series plot of the average daily activity pattern")
+```
+
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+
+5-minute interval containing the maximum steps: **835** (206 steps)
 
 ### Imputing missing values
 
